@@ -4,23 +4,59 @@ using UnityEngine;
 
 public class WalkToTreeNode : FSMNode
 {
+    Villager villagerData;
+
+    Transform villagerTransform;
+    private float waypointThreshold = 3f;
+
     public override void Entry()
     {
-        Debug.Log("starting");
+        villagerData = (Villager)GetAgent();
+        villagerTransform = villagerData.transform;
+        villagerData.target = FindClosestTree();
     }
 
     public override void Do()
     {
-        Debug.Log("walking");
+
+        villagerTransform.position += Vector3.Normalize(villagerData.target.transform.position - villagerTransform.position) * villagerData.walkSpeed * Time.deltaTime;
+        
     }
 
     public override void Exit()
     {
-        Debug.Log("leaving");
     }
 
-    public WalkToTreeNode() : base()
+    public override System.Type CheckTransition()
     {
-    
+        if (Vector3.Distance(villagerData.target.transform.position, villagerTransform.position) < waypointThreshold)
+        {
+            return typeof(HarvestFruitNode);
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    private GameObject FindClosestTree()
+    {
+        GameObject[] trees = GameObject.FindGameObjectsWithTag("fruitTree");
+        GameObject closestTree = null;
+        float closestDistance = Mathf.Infinity;
+        foreach (GameObject tree in trees)
+        {
+            if (!(tree.GetComponent<FruitTree>().GetFruitLeft() == 0))
+            {
+                float newDistance = Vector3.Distance(villagerTransform.position, tree.transform.position);
+                if (newDistance < closestDistance)
+                {
+                    closestDistance = newDistance;
+                    closestTree = tree;
+                }
+            }
+        }
+
+        return closestTree;
     }
 }
