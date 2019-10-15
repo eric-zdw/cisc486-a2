@@ -7,18 +7,31 @@ public class HarvestFruitNode : FSMNode
     Villager villagerData;
     FruitTree targetTree;
 
+    private float timeInterval;
+    private float timer;
+    public float harvestInterval = 1f;
+
     public override void Entry()
     {
         villagerData = (Villager)GetAgent();
         targetTree = villagerData.target.GetComponent<FruitTree>();
+        villagerData.StartAnimation("Pickup");
+        timer = harvestInterval;
+        timeInterval = Time.time;
     }
 
     public override void Do()
     {
-        if (targetTree.GetFruitLeft() > 0)
-        {
+        timeInterval = Time.time - timeInterval;
+        //Debug.Log(timeInterval);
+
+        timer -= timeInterval;
+        while (timer <= 0f) {
             GetFruit(targetTree);
+            timer += harvestInterval;
         }
+
+        timeInterval = Time.time;
     }
 
     public override void Exit()
@@ -27,7 +40,6 @@ public class HarvestFruitNode : FSMNode
 
     public override System.Type CheckTransition()
     {
-        Debug.Log(targetTree.GetFruitLeft());
         if (villagerData.fruitsInInventory == villagerData.inventorySize)
         {
             return typeof(WalkToVillageNode);

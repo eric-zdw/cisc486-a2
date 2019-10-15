@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FruitTree : MonoBehaviour
 {
-    private int fruits = 3;
+    private int fruits = 50;
 
     // Start is called before the first frame update
     void Start()

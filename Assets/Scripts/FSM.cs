@@ -8,6 +8,7 @@ public class FSM
     private FSMNode currentNode;
     private List<FSMNode> nodes;
     private MonoBehaviour agent;
+    private int priority = 0;
 
     private void TransitionToNode(System.Type t)
     {
@@ -52,11 +53,17 @@ public class FSM
             {
                 TransitionToNode(transitionResult);
             }
-            yield return new WaitForFixedUpdate();
+
+            if (priority == 0) yield return new WaitForEndOfFrame();
+            else if (priority == 1) yield return new WaitForSeconds(1f);
         }
     }
 
     public MonoBehaviour GetAgent() { return agent; }
+
+    public void SetPriority(int p) {
+        priority = p;
+    }
 
     public FSM(MonoBehaviour a)
     {

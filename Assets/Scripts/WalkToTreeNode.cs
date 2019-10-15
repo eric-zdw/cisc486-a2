@@ -7,19 +7,23 @@ public class WalkToTreeNode : FSMNode
     Villager villagerData;
 
     Transform villagerTransform;
-    private float waypointThreshold = 3f;
+    private float waypointThreshold = 5f;
 
     public override void Entry()
     {
         villagerData = (Villager)GetAgent();
         villagerTransform = villagerData.transform;
         villagerData.target = FindClosestTree();
+        villagerTransform.LookAt(villagerData.target.transform);
+        villagerData.StartAnimation("Walk");
+
+        villagerData.navMeshAgent.destination = villagerData.target.transform.position;
     }
 
     public override void Do()
     {
 
-        villagerTransform.position += Vector3.Normalize(villagerData.target.transform.position - villagerTransform.position) * villagerData.walkSpeed * Time.deltaTime;
+        //villagerTransform.position += Vector3.Normalize(villagerData.target.transform.position - villagerTransform.position) * villagerData.walkSpeed * Time.deltaTime;
         
     }
 
