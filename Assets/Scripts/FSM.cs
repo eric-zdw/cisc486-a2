@@ -54,8 +54,8 @@ public class FSM
                 TransitionToNode(transitionResult);
             }
 
-            if (priority == 0) yield return new WaitForEndOfFrame();
-            else if (priority == 1) yield return new WaitForSeconds(1f);
+            if (priority == 1) yield return new WaitForEndOfFrame();
+            else if (priority == 0) yield return new WaitForSeconds(1f);
         }
     }
 
@@ -63,6 +63,10 @@ public class FSM
 
     public void SetPriority(int p) {
         priority = p;
+    }
+
+    public int GetPriority() {
+        return priority;
     }
 
     public FSM(MonoBehaviour a)

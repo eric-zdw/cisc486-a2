@@ -31,6 +31,9 @@ public class StealFruitNode : FSMNode
             enemyData.fruitsInInventory++;
             timer += harvestInterval;
         }
+        if (enemyData.fruitsInInventory > enemyData.inventorySize) {
+            enemyData.fruitsInInventory = enemyData.inventorySize;
+        }
 
         timeInterval = Time.time;
     }

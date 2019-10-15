@@ -24,7 +24,7 @@ public class Villager : MonoBehaviour {
 
     public float walkSpeed = 4f;
 
-    FSM villagerFSM;
+    public FSM villagerFSM;
     public NavMeshAgent navMeshAgent;
         
     void Start()

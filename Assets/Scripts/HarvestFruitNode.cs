@@ -13,6 +13,7 @@ public class HarvestFruitNode : FSMNode
 
     public override void Entry()
     {
+        Debug.Log("entering HarvestFruitNode");
         villagerData = (Villager)GetAgent();
         targetTree = villagerData.target.GetComponent<FruitTree>();
         villagerData.StartAnimation("Pickup");
@@ -29,6 +30,9 @@ public class HarvestFruitNode : FSMNode
         while (timer <= 0f) {
             GetFruit(targetTree);
             timer += harvestInterval;
+        }
+        if (villagerData.fruitsInInventory > villagerData.inventorySize) {
+            villagerData.fruitsInInventory = villagerData.inventorySize;
         }
 
         timeInterval = Time.time;

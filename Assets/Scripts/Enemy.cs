@@ -14,7 +14,7 @@ public class Enemy : MonoBehaviour {
 
     public float walkSpeed = 10f;
 
-    FSM enemyFSM;
+    public FSM enemyFSM;
     public NavMeshAgent navMeshAgent;
         
     void Start()
