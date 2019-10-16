@@ -16,14 +16,15 @@ public class Enemy : MonoBehaviour {
 
     public FSM enemyFSM;
     public NavMeshAgent navMeshAgent;
+
+    private int currentAnimationHash;
         
     void Start()
     {
+        currentAnimationHash = Animator.StringToHash("Idle");
         animator = GetComponent<Animator>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         CreateFSM();
-        Debug.Log("starting");
-        StartCoroutine(enemyFSM.RunFSM());
     }
 
     void CreateFSM()
@@ -36,6 +37,8 @@ public class Enemy : MonoBehaviour {
     }
 
     public void StartAnimation(string s) {
+        animator.ResetTrigger(currentAnimationHash);
+        currentAnimationHash = Animator.StringToHash(s);
         animator.SetTrigger(Animator.StringToHash(s));
     }
 

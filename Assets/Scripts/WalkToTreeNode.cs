@@ -14,7 +14,6 @@ public class WalkToTreeNode : FSMNode
         villagerData = (Villager)GetAgent();
         villagerTransform = villagerData.transform;
         villagerData.target = FindClosestTree();
-        villagerTransform.LookAt(villagerData.target.transform);
         villagerData.StartAnimation("Walk");
 
         villagerData.navMeshAgent.destination = villagerData.target.transform.position;
@@ -33,6 +32,7 @@ public class WalkToTreeNode : FSMNode
 
     public override System.Type CheckTransition()
     {
+        //Debug.Log(Vector3.Distance(villagerData.target.transform.position, villagerTransform.position));
         if (Vector3.Distance(villagerData.target.transform.position, villagerTransform.position) < waypointThreshold)
         {
             return typeof(HarvestFruitNode);

@@ -7,17 +7,7 @@ using UnityEngine.AI;
 public class Villager : MonoBehaviour {
 
     private Animator animator;
-
-    private int walkHash = Animator.StringToHash("Walk");
-    private int idleHash = Animator.StringToHash("Idle");
-    private int dropHash = Animator.StringToHash("Drop");
-    private int pickHash = Animator.StringToHash("Pickup");
-
-    private int idleStateHash = Animator.StringToHash("idle");
-    private int walkingStateHash = Animator.StringToHash("walking");
-    private int dropStateHash = Animator.StringToHash("dropping");
-    private int pickupStateHash = Animator.StringToHash("pickingFruit");
-
+    private int currentAnimationHash;
     public int fruitsInInventory = 0;
     public int inventorySize = 10;
     public GameObject target;
@@ -29,11 +19,10 @@ public class Villager : MonoBehaviour {
         
     void Start()
     {
+        currentAnimationHash = Animator.StringToHash("Idle");
         animator = GetComponent<Animator>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         CreateFSM();
-        Debug.Log("starting");
-        StartCoroutine(villagerFSM.RunFSM());
     }
 
     void CreateFSM()
@@ -43,9 +32,12 @@ public class Villager : MonoBehaviour {
         villagerFSM.AddState(new WalkToTreeNode());
         villagerFSM.AddState(new HarvestFruitNode());
         villagerFSM.AddState(new WalkToVillageNode());
+        villagerFSM.AddState(new DropOffFruitNode());
     }
 
     public void StartAnimation(string s) {
+        animator.ResetTrigger(currentAnimationHash);
+        currentAnimationHash = Animator.StringToHash(s);
         animator.SetTrigger(Animator.StringToHash(s));
     }
 

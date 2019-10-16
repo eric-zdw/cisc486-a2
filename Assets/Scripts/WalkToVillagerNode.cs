@@ -14,7 +14,6 @@ public class WalkToVillagerNode : FSMNode
         enemyData = (Enemy)GetAgent();
         enemyTransform = enemyData.transform;
         enemyData.target = FindClosestVillager();
-        enemyTransform.LookAt(enemyData.target.transform);
         enemyData.StartAnimation("Walk");
 
         enemyData.navMeshAgent.destination = enemyData.target.transform.position;

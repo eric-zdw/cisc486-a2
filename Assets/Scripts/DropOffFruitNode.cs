@@ -2,40 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HarvestFruitNode : FSMNode
+public class DropOffFruitNode : FSMNode
 {
     Villager villagerData;
     FruitTree targetTree;
 
     private float timeInterval;
     private float timer;
-    public float harvestInterval = 1f;
+    public float dropOffInterval = 4f;
 
     public override void Entry()
     {
         villagerData = (Villager)GetAgent();
         targetTree = villagerData.target.GetComponent<FruitTree>();
-        villagerData.StartAnimation("Pickup");
-        timer = harvestInterval;
+        villagerData.StartAnimation("Drop");
+        timer = dropOffInterval;
         timeInterval = Time.time;
     }
 
     public override void Do()
     {
         timeInterval = Time.time - timeInterval;
-        int iterations = 0;
-
         timer -= timeInterval;
-        while (timer <= 0f) {
-            iterations++;
-            timer += harvestInterval;
-        }
-
-        while (iterations != 0 && villagerData.fruitsInInventory != villagerData.inventorySize && targetTree.GetFruitLeft() != 0) {
-            GetFruit(targetTree);
-            iterations--;
-        }
-
         timeInterval = Time.time;
     }
 
@@ -45,19 +33,12 @@ public class HarvestFruitNode : FSMNode
 
     public override System.Type CheckTransition()
     {
-        if (villagerData.fruitsInInventory == villagerData.inventorySize)
-        {
-            return typeof(WalkToVillageNode);
-        }
-        else if (targetTree.GetFruitLeft() == 0)
-        {
+        if (timer <= 0f) {
             return typeof(WalkToTreeNode);
         }
-        else
-        {
+        else {
             return null;
         }
-        
     }
     
     private void GetFruit(FruitTree t)

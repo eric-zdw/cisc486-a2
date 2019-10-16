@@ -14,7 +14,6 @@ public class WalkToVillageNode : FSMNode
         villagerData = (Villager)GetAgent();
         villagerTransform = villagerData.transform;
         villagerData.target = GameObject.FindGameObjectWithTag("village");
-        villagerTransform.LookAt(villagerData.target.transform);
         villagerData.StartAnimation("Walk");
 
         villagerData.navMeshAgent.destination = villagerData.target.transform.position;
@@ -36,7 +35,7 @@ public class WalkToVillageNode : FSMNode
     {
         if (Vector3.Distance(villagerData.target.transform.position, villagerTransform.position) < waypointThreshold)
         {
-            return typeof(WalkToTreeNode);
+            return typeof(DropOffFruitNode);
         }
         else
         {

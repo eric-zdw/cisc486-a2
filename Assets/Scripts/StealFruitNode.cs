@@ -24,15 +24,18 @@ public class StealFruitNode : FSMNode
     public override void Do()
     {
         timeInterval = Time.time - timeInterval;
+        int iterations = 0;
 
         timer -= timeInterval;
         while (timer <= 0f) {
-            targetVillager.fruitsInInventory--;
-            enemyData.fruitsInInventory++;
+            iterations++;
             timer += harvestInterval;
         }
-        if (enemyData.fruitsInInventory > enemyData.inventorySize) {
-            enemyData.fruitsInInventory = enemyData.inventorySize;
+
+        while (iterations != 0 && enemyData.fruitsInInventory != enemyData.inventorySize && targetVillager.fruitsInInventory != 0) {
+            targetVillager.fruitsInInventory--;
+            enemyData.fruitsInInventory++;
+            iterations--;
         }
 
         timeInterval = Time.time;
@@ -44,7 +47,7 @@ public class StealFruitNode : FSMNode
 
     public override System.Type CheckTransition()
     {
-        Debug.Log(enemyData.fruitsInInventory + ", " + enemyData.inventorySize);
+        //Debug.Log(enemyData.fruitsInInventory + ", " + enemyData.inventorySize);
         if (enemyData.fruitsInInventory == enemyData.inventorySize)
         {
             return typeof(WalkToHideoutNode);

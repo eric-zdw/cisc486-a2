@@ -14,7 +14,6 @@ public class WalkToHideoutNode : FSMNode
         enemyData = (Enemy)GetAgent();
         enemyTransform = enemyData.transform;
         enemyData.target = GameObject.FindGameObjectWithTag("hideout");
-        enemyTransform.LookAt(enemyData.target.transform);
         enemyData.StartAnimation("Walk");
 
         enemyData.navMeshAgent.destination = enemyData.target.transform.position;

@@ -8,7 +8,6 @@ public class FSM
     private FSMNode currentNode;
     private List<FSMNode> nodes;
     private MonoBehaviour agent;
-    private int priority = 0;
 
     private void TransitionToNode(System.Type t)
     {
@@ -31,9 +30,9 @@ public class FSM
         n.SetFSM(this);
         nodes.Add(n);
 
+        //if this node is the first one, set as start node
         if (nodes.Count == 1)
         {
-            Debug.Log(n.GetType());
             startNode.SetStartNode(n.GetType());
         }
     }
@@ -43,31 +42,17 @@ public class FSM
         startNode.SetStartNode(n);
     }
 
-    public IEnumerator RunFSM()
-    {
-        while (true)
+    public void RunFSM()
+    {   
+        currentNode.Do();
+        System.Type transitionResult = currentNode.CheckTransition();
+        if (transitionResult != null)
         {
-            currentNode.Do();
-            System.Type transitionResult = currentNode.CheckTransition();
-            if (transitionResult != null)
-            {
-                TransitionToNode(transitionResult);
-            }
-
-            if (priority == 1) yield return new WaitForEndOfFrame();
-            else if (priority == 0) yield return new WaitForSeconds(1f);
+            TransitionToNode(transitionResult);
         }
     }
 
     public MonoBehaviour GetAgent() { return agent; }
-
-    public void SetPriority(int p) {
-        priority = p;
-    }
-
-    public int GetPriority() {
-        return priority;
-    }
 
     public FSM(MonoBehaviour a)
     {
